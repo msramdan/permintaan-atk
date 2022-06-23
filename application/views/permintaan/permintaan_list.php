@@ -9,8 +9,6 @@
                 </button>
             </div>
             <div class="modal-body">
-
-
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -45,6 +43,7 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <h5>Detail Barang</h5>
                         <div class="table-responsive">
                             <span id="result"></span>
                             <div id="result_tunggu"></div>
@@ -111,15 +110,21 @@
                                                 <td><?php echo $permintaan->tanggal_permintaan ?></td>
                                                 <td><?php echo $permintaan->status ?></td>
                                                 <td style="text-align:center" width="250px">
-                                                <?php if($permintaan->status == "Waiting"){ ?>
-                                                    <a href="<?php base_url() ?>permintaan/approved/<?= $permintaan->permintaan_id ?>" id="download" class="btn btn-md btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Approved</a>
-                                                    <a href="<?php base_url() ?>permintaan/reject/<?= $permintaan->permintaan_id ?>" id="download" class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reject</a>
-                                                <?php }else{ ?>
-                                                    <button type="button" class="btn btn-md btn-primary" disabled><i class="fa fa-check" aria-hidden="true"></i> Approved</button>
-                                                    <button type="button" class="btn btn-md btn-danger" disabled><i class="fa fa-times" aria-hidden="true"></i> Reject</button>
-                                                <?php } ?>
-                                                   
-                                                    <a href="#" class="btn btn-success btn-sm" title="Detail" data-toggle="modal" data-target="#ajaxModel" data-id="<?= $permintaan->permintaan_id ?>" data-kode_permintaan="<?= $permintaan->kode_permintaan ?>" data-nama_karyawan="<?= $permintaan->nama_karyawan ?>" data-nip="<?= $permintaan->nip ?>" data-jabatan="<?= $permintaan->jabatan ?>" data-tanggal_permintaan="<?= $permintaan->tanggal_permintaan ?>" data-status="<?= $permintaan->status ?>" id="detailtransaksi">
+                                                    <?php if ($permintaan->status == "Waiting") { ?>
+                                                        <a href="<?php base_url() ?>permintaan/approved/<?= $permintaan->permintaan_id ?>" id="download" class="btn btn-md btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Approved</a>
+                                                        <a href="<?php base_url() ?>permintaan/reject/<?= $permintaan->permintaan_id ?>" id="download" class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reject</a>
+                                                    <?php } else { ?>
+                                                        <button type="button" class="btn btn-md btn-primary" disabled><i class="fa fa-check" aria-hidden="true"></i> Approved</button>
+                                                        <button type="button" class="btn btn-md btn-danger" disabled><i class="fa fa-times" aria-hidden="true"></i> Reject</button>
+                                                    <?php } ?>
+
+                                                    <a href="#" class="btn btn-success btn-sm" title="Detail" data-toggle="modal" data-target="#ajaxModel"
+                                                    data-id="<?= $permintaan->permintaan_id ?>"
+                                                    data-kode_permintaan="<?= $permintaan->kode_permintaan ?>"
+                                                    data-nama_karyawan="<?= $permintaan->nama_karyawan ?>"
+                                                    data-nip="<?= $permintaan->nip ?>"
+                                                    data-jabatan="<?= $permintaan->jabatan ?>"
+                                                    data-tanggal_permintaan="<?= $permintaan->tanggal_permintaan ?>" data-status="<?= $permintaan->status ?>" id="detailtransaksi">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
                                                 </td>

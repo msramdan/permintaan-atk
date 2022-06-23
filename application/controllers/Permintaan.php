@@ -156,14 +156,15 @@ class Permintaan extends CI_Controller
     {
         $data = $this->db->query("SELECT * from permintaan_detail
         join barang on barang.barang_id=permintaan_detail.barang_id 
-        where permintaan_detail.permintaan_detail_id='$id'");
+        where permintaan_detail.permintaan_id='$id'");
         $output = '';
         $output .= '<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th>Kode Barang</th>
                 <th>Nama Barang</th>
-                <th>Jumlah</th>
+                <th>Stok Tersedia</th>
+                <th>Jumlah Permintaan</th>
             </tr>
         </thead>
         <tbody>';
@@ -171,6 +172,7 @@ class Permintaan extends CI_Controller
             $output .= '<tr>
             <td>' . $row->kode_barang . '</td>
             <td>' . $row->nama_barang . '</td>
+            <td>' . $row->jumlah . '</td>
             <td>' . $row->qty . '</td>
 
         </tr>';
@@ -185,6 +187,15 @@ class Permintaan extends CI_Controller
         $this->db->query("UPDATE permintaan
         SET status='Approved'
         WHERE permintaan_id='$id'");
+        //get detail permintaan
+        $detailPermintaan = $this->db->query("SELECT * from permintaan_detail WHERE permintaan_id='$id'")->result();
+
+        foreach ($detailPermintaan as $data) {
+            $barang_id = $data->barang_id;
+            $qty = $data->qty;
+            $this->db->query("UPDATE barang SET jumlah = jumlah - $qty WHERE barang_id = '$barang_id'");
+        }
+        $this->session->set_flashdata('message', 'Permintaan Berhasil di Approved');
         redirect(site_url('permintaan'));
     }
 
@@ -193,6 +204,7 @@ class Permintaan extends CI_Controller
         $this->db->query("UPDATE permintaan
         SET status='Reject'
         WHERE permintaan_id='$id'");
+         $this->session->set_flashdata('message', 'Permintaan di Reject');
         redirect(site_url('permintaan'));
     }
 }

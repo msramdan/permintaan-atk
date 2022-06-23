@@ -60,19 +60,25 @@
                                                     <option value="Subbag Keuangan" style="color:black">Subbag Keuangan</option>
                                                     <option value="Subbag Humas" style="color:black">Subbag Humas</option>
                                                     <option value="Subbag Hukum" style="color:black">Subbag Hukum</option>
-                                                    <option value="Pemeriksa" style="color:black">Pemeriksa</option>
+                                                    <option value="Pelaksana" style="color:black">Pelaksana</option>
                                                 </select>
                                             </div>
                                             <input type="hidden" name="kode-produk" id="kode-produk">
+                                            <input type="hidden" name="jumlah" id="jumlah">
                                             <input type="hidden" name="index_tr" id="index-tr">
 
                                             <div class="mb-3">
-                                                <select name="produk" id="produk" class="form-control" id="produk">
+                                                <!-- <select name="produk" id="produk" class="form-control" id="produk">
                                                     <option value="" disabled selected>-- Pilih Barang --</option>
                                                     <?php $no = 1;
                                                     foreach ($barang_data as $barang) { ?>
                                                         <option value="<?= $barang->barang_id ?>" style="color:black"><?= $barang->nama_barang ?></option>
                                                     <?php } ?>
+                                                </select> -->
+
+                                                <select name="produk" id="produk" class="form-control">
+                                                    <option style="color: black;" value="" selected="">-- Pilih Barang --</option>
+                                                    <span id="result"></span>
                                                 </select>
 
                                             </div>
@@ -150,6 +156,7 @@
         const jabatan = $('#jabatan_id')
         const nama = $('#nama')
         const nip = $('#nip')
+        const jumlah = $('#jumlah')
 
         $('#form-purchase').submit(function(e) {
             e.preventDefault()
@@ -175,28 +182,28 @@
                     text: 'Kode pembelian tidak boleh kosong'
                 })
 
-            }else if(!nama.val()){
+            } else if (!nama.val()) {
                 nama.focus()
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Nama tidak boleh kosong'
                 })
-            }else if(!nip.val()){
+            } else if (!nip.val()) {
                 nip.focus()
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'NIP tidak boleh kosong'
                 })
-            }else if(!tanggal.val()){
+            } else if (!tanggal.val()) {
                 tanggal.focus()
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Tanggal tidak boleh kosong'
                 })
-            }else if(!jabatan.val()){
+            } else if (!jabatan.val()) {
                 jabatan.focus()
                 Swal.fire({
                     icon: 'error',
@@ -231,14 +238,10 @@
 
         })
 
-
-
         produk.change(function() {
-
             qty.prop('type', 'text')
             qty.prop('disabled', true)
             qty.val('Loading...')
-
             $.ajax({
                 url: '<?= base_url() ?>barang/getBarangById/' + $(this).val(),
                 type: "GET",
@@ -246,6 +249,7 @@
                 dataType: "json",
                 success: function(res) {
                     kodeProduk.val(res.kode_barang)
+                    jumlah.val(res.jumlah)
                     setTimeout(() => {
                         qty.prop('type', 'number')
                         qty.prop('disabled', false)
@@ -258,23 +262,31 @@
         })
 
         btnAdd.click(function() {
+            var jumlah = $('#jumlah').val()
+            var qtyMinta = $('#qty').val()
             if (!produk.val()) {
                 produk.focus()
-
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Produk tidak boleh kosong'
                 })
 
-            }else if (!qty.val() || qty.val() < 1) {
+            } else if (!qty.val() || qty.val() < 1) {
                 qty.focus()
                 qty.val('')
-
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Qty tidak boleh kosong dan minimal 1'
+                })
+
+            }else if (parseInt(jumlah) < parseInt(qtyMinta)) {
+                qty.focus()
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Stok barang kurang dari permintaan'
                 })
 
             } else {
@@ -297,6 +309,7 @@
                         <td>
                             ${qty.val()}
                             <input type="hidden" class="qty-hidden" name="qty[]" value="${qty.val()}">
+                            <input type="hidden" class="jumlah-hidden" name="jumlah[]" value="${jumlah}">
                         </td>
                         <td>
                             <button class="btn btn-warning btn-xs me-1 btn-edit" type="button">
@@ -319,6 +332,8 @@
 
         btnUpdate.click(function() {
             let index = $('#index-tr').val()
+            var jumlah = $('#jumlah').val()
+            var qtyMinta = $('#qty').val()
 
             if (!produk.val()) {
                 produk.focus()
@@ -329,7 +344,7 @@
                     text: 'Produk tidak boleh kosong'
                 })
 
-            }else if (!qty.val() || qty.val() < 1) {
+            } else if (!qty.val() || qty.val() < 1) {
                 qty.focus()
                 qty.val('')
 
@@ -337,6 +352,14 @@
                     icon: 'error',
                     title: 'Error',
                     text: 'Qty tidak boleh kosong dan minimal 1'
+                })
+
+            }else if (parseInt(jumlah) < parseInt(qtyMinta)) {
+                qty.focus()
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Stok barang kurang dari permintaan'
                 })
 
             } else {
@@ -357,6 +380,7 @@
                     <td>
                         ${qty.val()}
                         <input type="hidden" class="qty-hidden" name="qty[]" value="${qty.val()}">
+                        <input type="hidden" class="jumlah-hidden" name="jumlah[]" value="${jumlah}">
                     </td>
                     <td>
                         <button class="btn btn-warning btn-xs me-1 btn-edit" type="button">
@@ -383,6 +407,8 @@
             btnUpdate.show()
             produk.val($('.produk-hidden:eq(' + index + ')').val())
             qty.val($('.qty-hidden:eq(' + index + ')').val())
+            jumlah.val($('.jumlah-hidden:eq(' + index + ')').val())
+            
             $('#index-tr').val(index)
         })
 
@@ -399,10 +425,12 @@
                 no++
             })
         }
+
         function clearForm() {
             kodeProduk.val('')
             produk.val('')
             qty.val('')
+            jumlah.val('')
         }
 
         function cekTableLength() {
@@ -414,8 +442,23 @@
                 btnSave.prop('disabled', true)
             }
         }
-        
+
+        jabatan.change(function() {
+            let jabatan_id = $(this).val()
+            produk.val('Loading...')
+            $.ajax({
+                url: '<?php echo site_url('request/getListBarangForPelaksana') ?>',
+                type: 'POST',
+                data: {
+                    jabatan_id: jabatan_id
+                },
+                success: function(res) {
+                    $("#produk").html(res);
+                }
+            });
+        })
     </script>
+
 </body>
 
 </html>
