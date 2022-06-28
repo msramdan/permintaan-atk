@@ -55,11 +55,11 @@
 
 					<form action="<?= site_url('auth/process') ?>" method="post">
 						<div class="form-floating mb-20px">
-							<input type="text" required="" class="form-control fs-13px h-45px border-0" placeholder="Username" id="username" autocomplete="off" name="username" />
+							<input type="text" required="" class="form-control fs-13px h-45px border-0" required placeholder="Username" id="username" autocomplete="off" name="username" />
 							<label for="username" class="d-flex align-items-center text-gray-300 fs-13px">Username</label>
 						</div>
 						<div class="form-floating mb-20px">
-							<input type="password" required="" name="password" id="password" class="form-control fs-13px h-45px border-0" placeholder="Password" />
+							<input type="password" required="" name="password" id="password" required class="form-control fs-13px h-45px border-0" placeholder="Password" />
 							<label for="password" class="d-flex align-items-center text-gray-300 fs-13px">Password</label>
 						</div>
 						<div class="form-check mb-20px">
