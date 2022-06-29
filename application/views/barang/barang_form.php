@@ -46,7 +46,7 @@
 							</tr>
 							<?php if ($this->uri->segment(2) == 'create' || $this->uri->segment(2) == 'create_action') { ?>
 								<tr>
-									<td width='200'>Photo <?php echo form_error('photo') ?></td>
+									<td width='200'>photo <?php echo form_error('photo') ?></td>
 									<td><input type="file" class="form-control" name="photo" id="photo" placeholder="photo" required="" value="" onchange="return validasiEkstensi()" />
 										<!-- <div id="preview"></div> -->
 									</td>
@@ -66,33 +66,6 @@
 									</tr>
 								</div>
 							<?php } ?>
-							<td>Jabatan Pelaksana bisa request barang ini ? <?php echo form_error('is_pelaksana') ?></td>
-							<td>
-								<?php if ($this->uri->segment(2) == 'create' || $this->uri->segment(2) == 'create_action') { ?>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" id="is_pelaksana2" name="is_pelaksana" value="Tidak" checked>
-										<label class="form-check-label" for="is_pelaksana2">Tidak</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" id="is_pelaksana1" name="is_pelaksana" value="Ya">
-										<label class="form-check-label" for="is_pelaksana1">Ya</label>
-									</div>
-
-								<?php } else { ?>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" id="is_pelaksana2" name="is_pelaksana" value="Tidak" <?php echo $is_pelaksana == 'Tidak' ? 'checked' : 'null' ?>>
-										<label class="form-check-label" for="is_pelaksana2">Tidak</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" id="is_pelaksana1" name="is_pelaksana" value="Ya" <?php echo $is_pelaksana == 'Ya' ? 'checked' : 'null' ?>>
-										<label class="form-check-label" for="is_pelaksana1">Ya</label>
-									</div>
-
-								<?php } ?>
-
-
-
-							</td>
 							<tr>
 								<td></td>
 								<td><input type="hidden" name="barang_id" value="<?php echo $barang_id; ?>" />

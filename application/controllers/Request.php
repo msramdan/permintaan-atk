@@ -29,13 +29,15 @@ class Request extends CI_Controller
         $nip =   $this->input->post('nip');
         $jabatan =   $this->input->post('jabatan');
         $kode_permintaan =   $this->input->post('kode');
+        $team =   $this->input->post('team');
         $data = array(
             'kode_permintaan' => $kode_permintaan,
             'nip' => $nip,
             'jabatan' => $jabatan,
             'nama_karyawan' => $nama,
             'tanggal_permintaan' => $tanggal_permintaan,
-            'status' => "Waiting"
+            'status' => "Waiting",
+            'team' => $team
         );
         $permintaan = $this->db->insert('permintaan', $data);
         $permintaan_id = $this->db->insert_id();
@@ -50,35 +52,5 @@ class Request extends CI_Controller
             }
             echo json_encode('success');
         }
-    }
-
-    function getListBarangForPelaksana()
-    {
-        $id = $this->input->post('jabatan_id');
-        $output = '';
-        if ($id == "Pelaksana") {
-            $data = $this->db->query("SELECT * from barang where is_pelaksana='Ya'")->result();
-            $query_cek = $this->db->query("SELECT * from barang where is_pelaksana='Ya'");
-        } else {
-            $data = $this->db->query("SELECT * from barang")->result();
-            $query_cek = $this->db->query("SELECT * from barang");
-        }
-
-        $jml = $query_cek->num_rows();
-        if ($id == null || $id == '') {
-            $output .= '<option value=""  style="color: black;">-- Pilih --</option>';
-        } else {
-            if ($jml > 0) {
-                $output .= '
-							<option value=""  style="color: black;">-- Pilih --</option>';
-                foreach ($data as $row) {
-                    $output .= ' <option  style="color: black;" value="' . $row->barang_id . '">' . $row->kode_barang . ' - ' . $row->nama_barang . ' - Stok : ' . $row->jumlah . '</option>
-				  ';
-                }
-            } else {
-                $output .= '<option value=""  style="color: black;">-- Pilih --</option>';
-            }
-        }
-        echo $output;
     }
 }

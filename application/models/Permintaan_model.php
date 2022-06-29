@@ -16,8 +16,12 @@ class Permintaan_model extends CI_Model
     }
 
     // get all
-    function get_all()
+    function get_all($param = '')
     {
+        if (!empty($param)) {
+            $this->db->where('tanggal_permintaan >=', $param['start']);
+            $this->db->where('tanggal_permintaan <=', $param['end']);
+        }
         $this->db->order_by($this->id, $this->order);
         return $this->db->get($this->table)->result();
     }
@@ -62,17 +66,18 @@ class Permintaan_model extends CI_Model
         $this->db->where($this->id, $id);
         return $this->db->get($this->table)->row();
     }
-    
+
     // get total rows
-    function total_rows($q = NULL) {
+    function total_rows($q = NULL)
+    {
         $this->db->like('permintaan_id', $q);
-	$this->db->or_like('kode_permintaan', $q);
-	$this->db->or_like('nama_karyawan', $q);
-	$this->db->or_like('nip', $q);
-	$this->db->or_like('jabatan', $q);
-	$this->db->or_like('tanggal_permintaan', $q);
-	$this->db->or_like('status', $q);
-	$this->db->from($this->table);
+        $this->db->or_like('kode_permintaan', $q);
+        $this->db->or_like('nama_karyawan', $q);
+        $this->db->or_like('nip', $q);
+        $this->db->or_like('jabatan', $q);
+        $this->db->or_like('tanggal_permintaan', $q);
+        $this->db->or_like('status', $q);
+        $this->db->from($this->table);
         return $this->db->count_all_results();
     }
 
@@ -96,7 +101,6 @@ class Permintaan_model extends CI_Model
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
     }
-
 }
 
 /* End of file Permintaan_model.php */

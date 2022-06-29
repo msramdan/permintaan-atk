@@ -33,7 +33,7 @@
 
                                 <form action="" method="POST" id="form-purchase">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="mb-3">
                                                 <input class="form-control" id="kode" type="text" value="<?= $kode ?>" placeholder="Kode" name="nama" autocomplete="off" readonly>
                                             </div>
@@ -45,9 +45,7 @@
                                             <div class="mb-3">
                                                 <input class="form-control" id="nip" type="text" value="" placeholder="NIP" name="nip" autocomplete="off">
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-6">
                                             <div class="mb-3">
                                                 <input class="form-control" id="tanggal" type="date" readonly value="<?= date('Y-m-d') ?>" placeholder="NAMA" name="nama" autocomplete="off">
                                             </div>
@@ -60,25 +58,22 @@
                                                     <option value="Subbag Keuangan" style="color:black">Subbag Keuangan</option>
                                                     <option value="Subbag Humas" style="color:black">Subbag Humas</option>
                                                     <option value="Subbag Hukum" style="color:black">Subbag Hukum</option>
-                                                    <option value="Pelaksana" style="color:black">Pelaksana</option>
+                                                    <option value="Pemeriksa" style="color:black">Pemeriksa</option>
                                                 </select>
                                             </div>
+                                            <div class="mb-3 div-periksa" style="display: none;">
+                                                <input class="form-control" id="team" type="text" placeholder="team" name="team" autocomplete="off">
+                                            </div>
                                             <input type="hidden" name="kode-produk" id="kode-produk">
-                                            <input type="hidden" name="jumlah" id="jumlah">
                                             <input type="hidden" name="index_tr" id="index-tr">
 
                                             <div class="mb-3">
-                                                <!-- <select name="produk" id="produk" class="form-control" id="produk">
+                                                <select name="produk" id="produk" class="form-control" id="produk">
                                                     <option value="" disabled selected>-- Pilih Barang --</option>
                                                     <?php $no = 1;
                                                     foreach ($barang_data as $barang) { ?>
                                                         <option value="<?= $barang->barang_id ?>" style="color:black"><?= $barang->nama_barang ?></option>
                                                     <?php } ?>
-                                                </select> -->
-
-                                                <select name="produk" id="produk" class="form-control">
-                                                    <option style="color: black;" value="" selected="">-- Pilih Barang --</option>
-                                                    <span id="result"></span>
                                                 </select>
 
                                             </div>
@@ -156,11 +151,12 @@
         const jabatan = $('#jabatan_id')
         const nama = $('#nama')
         const nip = $('#nip')
-        const jumlah = $('#jumlah')
+        const team = $('#team')
 
         $('#form-purchase').submit(function(e) {
             e.preventDefault()
             let pembelian = {
+                team: team.val(),
                 nama: nama.val(),
                 nip: nip.val(),
                 tanggal: tanggal.val(),
@@ -210,6 +206,12 @@
                     title: 'Error',
                     text: 'Jabatan tidak boleh kosong'
                 })
+            } else if (team.val() == '' && jabatan.val() == 'Pemeriksa') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Team tidak boleh kosong'
+                })
             } else {
                 $.ajax({
                     type: 'POST',
@@ -238,10 +240,14 @@
 
         })
 
+
+
         produk.change(function() {
+
             qty.prop('type', 'text')
             qty.prop('disabled', true)
             qty.val('Loading...')
+
             $.ajax({
                 url: '<?= base_url() ?>barang/getBarangById/' + $(this).val(),
                 type: "GET",
@@ -249,7 +255,6 @@
                 dataType: "json",
                 success: function(res) {
                     kodeProduk.val(res.kode_barang)
-                    jumlah.val(res.jumlah)
                     setTimeout(() => {
                         qty.prop('type', 'number')
                         qty.prop('disabled', false)
@@ -262,10 +267,9 @@
         })
 
         btnAdd.click(function() {
-            var jumlah = $('#jumlah').val()
-            var qtyMinta = $('#qty').val()
             if (!produk.val()) {
                 produk.focus()
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -275,18 +279,11 @@
             } else if (!qty.val() || qty.val() < 1) {
                 qty.focus()
                 qty.val('')
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Qty tidak boleh kosong dan minimal 1'
-                })
-
-            }else if (parseInt(jumlah) < parseInt(qtyMinta)) {
-                qty.focus()
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Stok barang kurang dari permintaan'
                 })
 
             } else {
@@ -309,7 +306,6 @@
                         <td>
                             ${qty.val()}
                             <input type="hidden" class="qty-hidden" name="qty[]" value="${qty.val()}">
-                            <input type="hidden" class="jumlah-hidden" name="jumlah[]" value="${jumlah}">
                         </td>
                         <td>
                             <button class="btn btn-warning btn-xs me-1 btn-edit" type="button">
@@ -332,8 +328,6 @@
 
         btnUpdate.click(function() {
             let index = $('#index-tr').val()
-            var jumlah = $('#jumlah').val()
-            var qtyMinta = $('#qty').val()
 
             if (!produk.val()) {
                 produk.focus()
@@ -354,14 +348,6 @@
                     text: 'Qty tidak boleh kosong dan minimal 1'
                 })
 
-            }else if (parseInt(jumlah) < parseInt(qtyMinta)) {
-                qty.focus()
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Stok barang kurang dari permintaan'
-                })
-
             } else {
                 // cek duplikasi pas update
                 $('input[name="produk[]"]').each(function(i) {
@@ -380,7 +366,6 @@
                     <td>
                         ${qty.val()}
                         <input type="hidden" class="qty-hidden" name="qty[]" value="${qty.val()}">
-                        <input type="hidden" class="jumlah-hidden" name="jumlah[]" value="${jumlah}">
                     </td>
                     <td>
                         <button class="btn btn-warning btn-xs me-1 btn-edit" type="button">
@@ -407,8 +392,6 @@
             btnUpdate.show()
             produk.val($('.produk-hidden:eq(' + index + ')').val())
             qty.val($('.qty-hidden:eq(' + index + ')').val())
-            jumlah.val($('.jumlah-hidden:eq(' + index + ')').val())
-            
             $('#index-tr').val(index)
         })
 
@@ -430,7 +413,6 @@
             kodeProduk.val('')
             produk.val('')
             qty.val('')
-            jumlah.val('')
         }
 
         function cekTableLength() {
@@ -442,23 +424,16 @@
                 btnSave.prop('disabled', true)
             }
         }
-
-        jabatan.change(function() {
-            let jabatan_id = $(this).val()
-            produk.val('Loading...')
-            $.ajax({
-                url: '<?php echo site_url('request/getListBarangForPelaksana') ?>',
-                type: 'POST',
-                data: {
-                    jabatan_id: jabatan_id
-                },
-                success: function(res) {
-                    $("#produk").html(res);
-                }
-            });
+        $('#jabatan_id').change(function() {
+            var value = $(this).val()
+            if (value == 'Pemeriksa') {
+                $('.div-periksa').show()
+            } else {
+                $('#team').val('');
+                $('.div-periksa').hide()
+            }
         })
     </script>
-
 </body>
 
 </html>

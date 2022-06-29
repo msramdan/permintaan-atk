@@ -4,11 +4,13 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail Permintaan</h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close no-print" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+
+
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -43,7 +45,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <h5>Detail Barang</h5>
                         <div class="table-responsive">
                             <span id="result"></span>
                             <div id="result_tunggu"></div>
@@ -54,6 +55,8 @@
             </div>
             <div class="modal-footer">
 
+                <a href="#" id="pdf" class="btn btn-warning">Download PDF</a>
+                <button type="button" class="btn btn-primary" onclick="print()">Print</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -72,6 +75,24 @@
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
             </div>
         </div>
+        <form action="<?= base_url() ?>permintaan" method="POST" class="row mx-5">
+            <div class="form-group col-sm-2">
+                <label for=" exampleInputEmail1">Start Date</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" value="<?php echo !empty($startDate) ? $startDate : ''; ?>">
+            </div>
+            <div class="form-group col-sm-2">
+                <label for=" exampleInputEmail1">End Date</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" value="<?php echo !empty($endDate) ? $endDate : ''; ?>">
+            </div>
+            <div class="col-sm-3">
+                <button type="submit" id="" class="btn btn-primary mt-3 ml-2">Filter</button>
+                <?php if (!empty($endDate) && !empty($startDate)) { ?>
+                    <a href="<?= base_url() ?>/Permintaan" class="btn btn-warning mt-3">Reset</a>
+                <?php } ?>
+            </div>
+        </form>
+
+
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -99,32 +120,26 @@
                                         </tr>
                                     </thead>
                                     <tbody><?php $no = 1;
-                                            foreach ($permintaan_data as $permintaan) {
+                                            foreach ($permintaan_data as $permintaanKey => $permintaanVal) {
                                             ?>
                                             <tr>
                                                 <td><?= $no++ ?></td>
-                                                <td><?php echo $permintaan->kode_permintaan ?></td>
-                                                <td><?php echo $permintaan->nama_karyawan ?></td>
-                                                <td><?php echo $permintaan->nip ?></td>
-                                                <td><?php echo $permintaan->jabatan ?></td>
-                                                <td><?php echo $permintaan->tanggal_permintaan ?></td>
-                                                <td><?php echo $permintaan->status ?></td>
+                                                <td><?php echo $permintaanVal['kode_permintaan'] ?></td>
+                                                <td><?php echo $permintaanVal['nama_karyawan'] ?></td>
+                                                <td><?php echo $permintaanVal['nip'] ?></td>
+                                                <td><?php echo $permintaanVal['jabatan'] ?></td>
+                                                <td><?php echo $permintaanVal['tanggal_permintaan'] ?></td>
+                                                <td><?php echo $permintaanVal['status'] ?></td>
                                                 <td style="text-align:center" width="250px">
-                                                    <?php if ($permintaan->status == "Waiting") { ?>
-                                                        <a href="<?php base_url() ?>permintaan/approved/<?= $permintaan->permintaan_id ?>" id="download" class="btn btn-md btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Approved</a>
-                                                        <a href="<?php base_url() ?>permintaan/reject/<?= $permintaan->permintaan_id ?>" id="download" class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reject</a>
+                                                    <?php if ($permintaanVal['status'] == "Waiting") { ?>
+                                                        <a href="<?php base_url() ?>permintaan/approved/<?= $permintaanVal['permintaan_id'] ?>" id="download" class="btn btn-md btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Approved</a>
+                                                        <a href="<?php base_url() ?>permintaan/reject/<?= $permintaanVal['permintaan_id'] ?>" id="download" class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reject</a>
                                                     <?php } else { ?>
                                                         <button type="button" class="btn btn-md btn-primary" disabled><i class="fa fa-check" aria-hidden="true"></i> Approved</button>
                                                         <button type="button" class="btn btn-md btn-danger" disabled><i class="fa fa-times" aria-hidden="true"></i> Reject</button>
                                                     <?php } ?>
 
-                                                    <a href="#" class="btn btn-success btn-sm" title="Detail" data-toggle="modal" data-target="#ajaxModel"
-                                                    data-id="<?= $permintaan->permintaan_id ?>"
-                                                    data-kode_permintaan="<?= $permintaan->kode_permintaan ?>"
-                                                    data-nama_karyawan="<?= $permintaan->nama_karyawan ?>"
-                                                    data-nip="<?= $permintaan->nip ?>"
-                                                    data-jabatan="<?= $permintaan->jabatan ?>"
-                                                    data-tanggal_permintaan="<?= $permintaan->tanggal_permintaan ?>" data-status="<?= $permintaan->status ?>" id="detailtransaksi">
+                                                    <a href="#" class="btn btn-success btn-sm" title="Detail" data-toggle="modal" data-target="#ajaxModel" data-id="<?= $permintaanVal['permintaan_id'] ?>" data-kode_permintaan="<?= $permintaanVal['kode_permintaan'] ?>" data-nama_karyawan="<?= $permintaanVal['nama_karyawan'] ?>" data-nip="<?= $permintaanVal['nip'] ?>" data-jabatan="<?= $permintaanVal['jabatan'] ?>" data-tanggal_permintaan="<?= $permintaanVal['tanggal_permintaan'] ?>" data-status="<?= $permintaanVal['status'] ?>" id="detailtransaksi">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
                                                 </td>
@@ -140,7 +155,6 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
         $(document).on('click', '#detailtransaksi', function() {
             var id = $(this).data('id');
@@ -150,7 +164,6 @@
             var jabatan = $(this).data('jabatan');
             var status = $(this).data('status');
             var tanggal_permintaan = $(this).data('tanggal_permintaan');
-
 
             $('#ajaxModel #kode_permintaan').text(kode_permintaan);
             $('#ajaxModel #nama_karyawan').text(nama_karyawan);
@@ -166,14 +179,50 @@
                 success: function(html) {
                     $("#result").html(html);
                     $("#result_tunggu").html('');
+                    $('#pdf').attr("href", "<?php echo base_url('permintaan/pdf/') ?>" + id)
+
                 }
             });
 
-
         })
-
-
         $('.updateData').click(function() {
             $('#ajaxModelEdit').modal('show');
         });
+
+        function print() {
+            var button = $('#ajaxModel').find('button');
+            $.each(button, function(i, val) {
+                $(button[i]).hide()
+            });
+            var divContents = $('#ajaxModel').html();
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write(divContents);
+            a.document.close();
+            a.print();
+
+            var button = $('#ajaxModel').find('button');
+            $.each(button, function(i, val) {
+                $(button[i]).show()
+            });
+        }
+
+        function date() {
+            var startDate = $('#startDate').val()
+            var endDate = $('#endDate').val()
+            if (startDate > endDate) {
+                alert('Tanggal pertama Tidak Boleh lebih besar dari akhir')
+                var now = new Date();
+                var day = ("0" + now.getDate()).slice(-2);
+                var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                var today = now.getFullYear() + "-" + (month) + "-" + (day);
+                $('#endDate').val(today);
+                $('#startDate').val(today);
+                return
+            }
+            $("#export").attr("href", "<?= base_url('Permintaan/filterDate') ?>/" + startDate + "/" + endDate)
+        }
+        $('#startDate,#endDate').change(function() {
+            if ($('#startDate').val() !== '' && $('#endDate').val() !== '')
+                date()
+        })
     </script>
