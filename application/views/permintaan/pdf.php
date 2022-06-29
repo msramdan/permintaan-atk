@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <title>Document</title>
     <style>
         #table {
             font-family: sans-serif;
@@ -33,36 +30,78 @@
             text-align: left;
         }
     </style>
+    <title>Laporan Permintaan</title>
+    <style>
+        #table {
+            font-family: sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            text-align: left;
+            line-height: 14px
+        }
+
+        #table td,
+        #table th {
+            border: 1px solid #ddd;
+            padding: 4px;
+        }
+
+        #table th {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            text-align: left;
+            background-color: #fff;
+            color: black;
+            text-align: left;
+        }
+    </style>
 </head>
 
 
 <body>
     <div class="container">
-        <table class="table" id="table">
+        <center>
+            <h4>Laporan Permintaan</h4>
+        </center>
+
+        <hr>
+        <table style="font-family: sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 12px;
+                text-align: left;">
             <tbody>
                 <tr>
                     <td>Kode Permintaan</td>
+                    <td>:</td>
                     <td><?php echo $data[0]['code'] ?></td>
                 </tr>
                 <tr>
                     <td>Nama Karyawan</td>
+                    <td>:</td>
                     <td><?php echo $data[0]['name'] ?></td>
                 </tr>
                 <tr>
                     <td>NIP</td>
+                    <td>:</td>
                     <td><?php echo $data[0]['nip'] ?></td>
                 </tr>
                 <tr>
                     <td>Jabatan</td>
+                    <td>:</td>
                     <td><?php echo $data[0]['jabatan'] ?></td>
                 </tr>
                 <tr>
                     <td>Status</td>
+                    <td>:</td>
                     <td><?php echo $data[0]['status'] ?></td>
                 </tr>
             </tbody>
         </table>
-        <table class="mt-5 table table-bordered">
+        <h4>Detail Item Permintaan</h4>
+        <!-- <hr> -->
+        <table id="table">
             <thead>
                 <tr>
                     <th>Kode Barang</th>

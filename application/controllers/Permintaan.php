@@ -173,7 +173,7 @@ class Permintaan extends MY_Controller
     {
         $data = $this->db->query("SELECT * from permintaan_detail
         join barang on barang.barang_id=permintaan_detail.barang_id 
-        where permintaan_detail.permintaan_detail_id='$id'");
+        where permintaan_detail.permintaan_id='$id'");
         $output = '';
         $output .= '<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>

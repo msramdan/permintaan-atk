@@ -56,7 +56,7 @@
             <div class="modal-footer">
 
                 <a href="#" id="pdf" class="btn btn-warning">Download PDF</a>
-                <button type="button" class="btn btn-primary" onclick="print()">Print</button>
+                <!-- <button type="button" class="btn btn-primary" onclick="print()">Print</button> -->
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -158,6 +158,8 @@
     <script type="text/javascript">
         $(document).on('click', '#detailtransaksi', function() {
             var id = $(this).data('id');
+            // console.log(id)
+
             var kode_permintaan = $(this).data('kode_permintaan');
             var nama_karyawan = $(this).data('nama_karyawan');
             var nip = $(this).data('nip');
