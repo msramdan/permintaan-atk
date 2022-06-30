@@ -31,7 +31,9 @@
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
                                             <th>Desk</th>
+                                            <th>Is Pelaksana</th>
                                             <th>Photo</th>
+                                            
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -44,6 +46,7 @@
                                                 <td><?php echo $barang->nama_barang ?></td>
                                                 <td><?php echo $barang->jumlah ?></td>
                                                 <td><?php echo $barang->desk ?></td>
+                                                <td><?php echo $barang->is_pelaksana ?></td>
                                                 <td>
 													<a id="view_gambar" href="#modal-dialog" data-bs-toggle="modal" <?php if ($barang->photo == '' || $barang->photo == null) { ?> data-photo="default.png" <?php } else { ?> data-photo="<?php echo $barang->photo ?>" <?php } ?> data-nama_barang="<?php echo $barang->nama_barang ?>">
 														<?php if ($barang->photo == '' || $barang->photo == null) { ?>

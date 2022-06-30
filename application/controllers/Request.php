@@ -53,4 +53,34 @@ class Request extends CI_Controller
             echo json_encode('success');
         }
     }
+
+    function getListBarangForPelaksana()
+    {
+        $id = $this->input->post('jabatan_id');
+        $output = '';
+        if ($id == "Pelaksana") {
+            $data = $this->db->query("SELECT * from barang where is_pelaksana='Ya'")->result();
+            $query_cek = $this->db->query("SELECT * from barang where is_pelaksana='Ya'");
+        } else {
+            $data = $this->db->query("SELECT * from barang")->result();
+            $query_cek = $this->db->query("SELECT * from barang");
+        }
+
+        $jml = $query_cek->num_rows();
+        if ($id == null || $id == '') {
+            $output .= '<option value=""  style="color: black;">-- Pilih --</option>';
+        } else {
+            if ($jml > 0) {
+                $output .= '
+							<option value=""  style="color: black;">-- Pilih --</option>';
+                foreach ($data as $row) {
+                    $output .= ' <option  style="color: black;" value="' . $row->barang_id . '">' . $row->kode_barang . ' - ' . $row->nama_barang . ' - Stok : ' . $row->jumlah . '</option>
+				  ';
+                }
+            } else {
+                $output .= '<option value=""  style="color: black;">-- Pilih --</option>';
+            }
+        }
+        echo $output;
+    }
 }

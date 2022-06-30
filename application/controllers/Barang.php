@@ -8,7 +8,7 @@ class Barang extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        is_login();
+        // is_login();
         $this->load->model('Barang_model');
         $this->load->library('form_validation');
     }
@@ -63,7 +63,6 @@ class Barang extends CI_Controller
     public function create_action()
     {
         $this->_rules();
-
         if ($this->form_validation->run() == FALSE) {
             $this->create();
         } else {
@@ -82,6 +81,7 @@ class Barang extends CI_Controller
                 'nama_barang' => $this->input->post('nama_barang', TRUE),
                 'jumlah' => $this->input->post('jumlah', TRUE),
                 'desk' => $this->input->post('desk', TRUE),
+                'is_pelaksana' => $this->input->post('is_pelaksana', TRUE),
                 'photo' => $photo,
             );
 
@@ -104,6 +104,7 @@ class Barang extends CI_Controller
                 'nama_barang' => set_value('nama_barang', $row->nama_barang),
                 'jumlah' => set_value('jumlah', $row->jumlah),
                 'desk' => set_value('desk', $row->desk),
+                'is_pelaksana' => set_value('is_pelaksana', $row->is_pelaksana),
                 'photo' => set_value('photo', $row->photo),
             );
             $this->template->load('template', 'barang/barang_form', $data);
@@ -147,6 +148,7 @@ class Barang extends CI_Controller
                 'nama_barang' => $this->input->post('nama_barang', TRUE),
                 'jumlah' => $this->input->post('jumlah', TRUE),
                 'desk' => $this->input->post('desk', TRUE),
+                'is_pelaksana' => $this->input->post('is_pelaksana', TRUE),
                 'photo' => $photo,
             );
 

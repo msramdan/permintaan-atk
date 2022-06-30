@@ -63,9 +63,6 @@
                                                     <option value="Pelaksana" style="color:black">Pelaksana</option>
                                                 </select>
                                             </div>
-                                            <div class="mb-3 div-periksa" style="display: none;">
-                                                <input class="form-control" id="team" type="text" placeholder="team" name="team" autocomplete="off">
-                                            </div>
                                             <input type="hidden" name="kode-produk" id="kode-produk">
                                             <input type="hidden" name="jumlah" id="jumlah">
                                             <input type="hidden" name="index_tr" id="index-tr">
@@ -160,13 +157,11 @@
         const nama = $('#nama')
         const nip = $('#nip')
         const jumlah = $('#jumlah')
-        const team = $('#team')
 
         $('#form-purchase').submit(function(e) {
             e.preventDefault()
             let pembelian = {
                 nama: nama.val(),
-                team: team.val(),
                 nip: nip.val(),
                 tanggal: tanggal.val(),
                 jabatan: jabatan.val(),
@@ -214,12 +209,6 @@
                     icon: 'error',
                     title: 'Error',
                     text: 'Jabatan tidak boleh kosong'
-                })
-            }else if (team.val() == '' && jabatan.val() == 'Pemeriksa') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Team tidak boleh kosong'
                 })
             } else {
                 $.ajax({
@@ -471,9 +460,7 @@
 
         $('#jabatan_id').change(function() {
             var value = $(this).val()
-            console.log(value);
-
-            if (value == 'Pelaksana') {
+            if (value == 'Pemeriksa') {
                 $('.div-periksa').show()
             } else {
                 $('#team').val('');
